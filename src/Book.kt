@@ -16,19 +16,26 @@ class Book(
     var date_published: LocalDate,
     var book_id: Int,    //on the book
     var category: BOOK_CATEGORY,   //enum
-    var libraryId: LIBRARY_ID,     //enum
+    //var libraryId: LIBRARY_ID,     //enum
 ) {
     //properties for borrowing
-    private var status: BOOK_STATUS = BOOK_STATUS.UNINITIALIZED
+    private var status: BOOK_STATUS = BOOK_STATUS.IN
     private var current_reader: Reader? = null
     var prev_readers = mutableListOf<Reader>()
     private var back_date: LocalDate? = LocalDate.of(2000, 1, 1)
 
 
     init {
-        status = BOOK_STATUS.IN
-        println("Book added, title: ${this.title}, author: ${this.author}, pages: ${this.pages}, released: ${this.date_published}, category: ${this.category}")
+        /*
+        status = BOOK_STATUS.UNINITIALIZED
 
+        if (library.addBook(this)){
+            println("Book added, title: ${this.title}, author: ${this.author}, pages: ${this.pages}, released: ${this.date_published}, category: ${this.category}")
+        }
+        else{
+
+        }
+         */
     }
 
     fun borrow(borrower: Reader, mon_add: Int): Boolean {
@@ -49,8 +56,11 @@ class Book(
             return true
         } else {
             println("Sorry ${borrower.name}, $title by $author is currently unavailable: status: $status")
-            if (status == BOOK_STATUS.OUT) {
-                println("Will be available from $back_date")
+            if (status == BOOK_STATUS.OUT || status == BOOK_STATUS.OUT_LOCALLY) {
+                println("Currently at ${current_reader?.name}")
+                if (status == BOOK_STATUS.OUT) {
+                    println("Will be available from $back_date")
+                }
             }
             return false
         }

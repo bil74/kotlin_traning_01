@@ -1,15 +1,17 @@
 import java.time.LocalDate
 import java.time.Month
+import java.time.temporal.ChronoUnit
+import kotlin.math.abs
 
 class Reader(
     var name:String,
-    var age:Int
+    var birthDate:LocalDate
 ) {
     var license_expires: LocalDate
 
     init {
         license_expires = LocalDate.now().minusDays(1)
-        println("Reader added, name:${this.name}, age:${this.age}, license expires: ${this.license_expires}")
+        println("Reader added, name:${this.name}, age:${abs(ChronoUnit.YEARS.between(LocalDate.now(), birthDate))}, license expires: ${this.license_expires}")
     }
 
     fun extend_license_with_months(mon_val: Int): Unit{
@@ -23,3 +25,4 @@ class Reader(
         return now > license_expires
     }
 }
+
